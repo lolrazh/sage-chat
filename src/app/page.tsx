@@ -39,6 +39,17 @@ export default async function Home() {
               </div>
             </Link>
           </div>
+          
+          <Link
+            className="flex max-w-xs flex-col gap-4 rounded-xl bg-pink-500/80 p-4 hover:bg-pink-500/90 transition-colors"
+            href="/chat"
+          >
+            <h3 className="text-2xl font-bold">Try Our Cute Chat App →</h3>
+            <div className="text-lg">
+              Check out our adorable chat interface powered by Gemini-flash-2.0-lite (coming soon!)
+            </div>
+          </Link>
+          
           <div className="flex flex-col items-center gap-2">
             <p className="text-2xl text-white">
               {hello ? hello.greeting : "Loading tRPC query..."}
