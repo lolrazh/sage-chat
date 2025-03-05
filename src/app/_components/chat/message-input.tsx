@@ -99,7 +99,7 @@ export function MessageInput({
         type="submit" 
         size="icon" 
         disabled={isLoading || !(value !== undefined ? value : input).trim()}
-        className="h-12 w-12 rounded-full"
+        className="h-12 w-12"
       >
         {isLoading ? (
           <LoadingSpinner className="h-5 w-5" />

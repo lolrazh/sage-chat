@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useEffect } from "react";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "~/components/ui/card";
+import { Card, CardContent, CardFooter } from "~/components/ui/card";
 import { MessageList } from "./message-list";
 import { MessageInput } from "./message-input";
 import { useChat } from "ai/react";
@@ -31,10 +31,7 @@ export function ChatInterface() {
 
   return (
     <Card className="w-full h-full flex flex-col shadow-lg border-0">
-      <CardHeader className="px-6 py-4 border-b">
-        <CardTitle className="text-xl">Chat with Sage</CardTitle>
-      </CardHeader>
-      <CardContent className="flex-1 overflow-y-auto p-6">
+      <CardContent className="flex-1 overflow-y-auto p-6 pt-6">
         <MessageList messages={messages} />
         <div ref={messagesEndRef} />
       </CardContent>
