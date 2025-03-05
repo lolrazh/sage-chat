@@ -2,12 +2,9 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { cn } from "~/lib/utils";
+import { Message as AIMessage } from "ai";
 
-export interface Message {
-  id: string;
-  role: "user" | "assistant";
-  content: string;
-}
+export type Message = AIMessage;
 
 interface MessageListProps {
   messages: Message[];
@@ -28,6 +25,9 @@ interface MessageItemProps {
 }
 
 function MessageItem({ message }: MessageItemProps) {
+  // Skip system messages
+  if (message.role === "system") return null;
+  
   const isUser = message.role === "user";
   
   return (

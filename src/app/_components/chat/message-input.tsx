@@ -8,19 +8,31 @@ import { SendIcon, Mic } from "lucide-react";
 interface MessageInputProps {
   onSendMessage: (message: string) => void;
   isLoading?: boolean;
+  value?: string;
+  onChange?: (e: ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
-export function MessageInput({ onSendMessage, isLoading = false }: MessageInputProps) {
+export function MessageInput({ 
+  onSendMessage, 
+  isLoading = false, 
+  value, 
+  onChange 
+}: MessageInputProps) {
   const [input, setInput] = useState("");
   const [isRecording, setIsRecording] = useState(false);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
-    if (!input.trim()) return;
+    const messageText = value !== undefined ? value : input;
+    if (!messageText.trim()) return;
     
-    onSendMessage(input);
-    setInput("");
+    onSendMessage(messageText);
+    
+    // Only clear local state if we're not using controlled input
+    if (value === undefined) {
+      setInput("");
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -31,13 +43,28 @@ export function MessageInput({ onSendMessage, isLoading = false }: MessageInputP
     }
   };
 
+  const handleInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    if (onChange) {
+      onChange(e);
+    } else {
+      setInput(e.target.value);
+    }
+  };
+
   const toggleRecording = () => {
     // This would be replaced with actual voice recording logic
     setIsRecording(!isRecording);
     if (isRecording) {
       // Simulate end of recording with a message
       setTimeout(() => {
-        setInput(prev => prev + "Voice input would appear here.");
+        if (onChange) {
+          const event = {
+            target: { value: (value || "") + "Voice input would appear here." }
+          } as ChangeEvent<HTMLTextAreaElement>;
+          onChange(event);
+        } else {
+          setInput(prev => prev + "Voice input would appear here.");
+        }
         setIsRecording(false);
       }, 500);
     }
@@ -47,8 +74,8 @@ export function MessageInput({ onSendMessage, isLoading = false }: MessageInputP
     <form onSubmit={handleSubmit} className="relative w-full flex gap-2 items-end">
       <div className="relative flex-1">
         <Textarea
-          value={input}
-          onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setInput(e.target.value)}
+          value={value !== undefined ? value : input}
+          onChange={handleInputChange}
           placeholder="Type a message..."
           className="min-h-12 resize-none pr-14 py-3"
           disabled={isLoading || isRecording}
@@ -71,7 +98,7 @@ export function MessageInput({ onSendMessage, isLoading = false }: MessageInputP
       <Button 
         type="submit" 
         size="icon" 
-        disabled={isLoading || !input.trim()}
+        disabled={isLoading || !(value !== undefined ? value : input).trim()}
         className="h-12 w-12 rounded-full"
       >
         {isLoading ? (
