@@ -3,7 +3,7 @@
 import { useState, type FormEvent, type ChangeEvent } from "react";
 import { Button } from "~/components/ui/button";
 import { Textarea } from "~/components/ui/textarea";
-import { SendIcon } from "lucide-react";
+import { SendIcon, Mic } from "lucide-react";
 
 interface MessageInputProps {
   onSendMessage: (message: string) => void;
@@ -12,6 +12,7 @@ interface MessageInputProps {
 
 export function MessageInput({ onSendMessage, isLoading = false }: MessageInputProps) {
   const [input, setInput] = useState("");
+  const [isRecording, setIsRecording] = useState(false);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -30,26 +31,53 @@ export function MessageInput({ onSendMessage, isLoading = false }: MessageInputP
     }
   };
 
+  const toggleRecording = () => {
+    // This would be replaced with actual voice recording logic
+    setIsRecording(!isRecording);
+    if (isRecording) {
+      // Simulate end of recording with a message
+      setTimeout(() => {
+        setInput(prev => prev + "Voice input would appear here.");
+        setIsRecording(false);
+      }, 500);
+    }
+  };
+
   return (
-    <form onSubmit={handleSubmit} className="relative">
-      <Textarea
-        value={input}
-        onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setInput(e.target.value)}
-        placeholder="Type a message..."
-        className="min-h-12 resize-none pr-14 py-3"
-        disabled={isLoading}
-        onKeyDown={handleKeyDown}
-      />
+    <form onSubmit={handleSubmit} className="relative w-full flex gap-2 items-end">
+      <div className="relative flex-1">
+        <Textarea
+          value={input}
+          onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setInput(e.target.value)}
+          placeholder="Type a message..."
+          className="min-h-12 resize-none pr-14 py-3"
+          disabled={isLoading || isRecording}
+          onKeyDown={handleKeyDown}
+          rows={1}
+        />
+        <Button 
+          type="button" 
+          size="icon" 
+          variant="ghost"
+          onClick={toggleRecording}
+          disabled={isLoading}
+          className={`absolute right-2 bottom-2 ${isRecording ? 'text-red-500' : ''}`}
+        >
+          <Mic className="h-4 w-4" />
+          <span className="sr-only">Record voice</span>
+        </Button>
+      </div>
+      
       <Button 
         type="submit" 
         size="icon" 
         disabled={isLoading || !input.trim()}
-        className="absolute right-2 bottom-2"
+        className="h-12 w-12 rounded-full"
       >
         {isLoading ? (
-          <LoadingSpinner className="h-4 w-4" />
+          <LoadingSpinner className="h-5 w-5" />
         ) : (
-          <SendIcon className="h-4 w-4" />
+          <SendIcon className="h-5 w-5" />
         )}
         <span className="sr-only">Send message</span>
       </Button>

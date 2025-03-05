@@ -25,7 +25,7 @@ export function ChatInterface() {
     {
       id: "welcome",
       role: "assistant",
-      content: "Hello! I'm your AI assistant powered by Gemini-flash-2.0-lite. How can I help you today?",
+      content: "Hello! I'm Sage, your AI thought companion. I'm here to help you reflect on your thoughts and recognize patterns in your thinking. How are you feeling today?",
     },
   ]);
   const [isLoading, setIsLoading] = useState(false);
@@ -62,17 +62,15 @@ export function ChatInterface() {
   };
 
   return (
-    <Card className="w-full h-full flex flex-col">
-      <CardHeader className="px-4 py-3">
-        <CardTitle className="text-xl">Chat</CardTitle>
+    <Card className="w-full h-full flex flex-col shadow-lg border-0">
+      <CardHeader className="px-6 py-4 border-b">
+        <CardTitle className="text-xl">Chat with Sage</CardTitle>
       </CardHeader>
-      <Separator />
-      <CardContent className="flex-1 overflow-y-auto p-4">
+      <CardContent className="flex-1 overflow-y-auto p-6">
         <MessageList messages={messages} />
         <div ref={messagesEndRef} />
       </CardContent>
-      <Separator />
-      <CardFooter className="p-4">
+      <CardFooter className="p-6 border-t">
         <MessageInput onSendMessage={handleSendMessage} isLoading={isLoading} />
       </CardFooter>
     </Card>
